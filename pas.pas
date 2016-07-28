@@ -1,6 +1,6 @@
-program Expert;
+PROGRAM Expert;
 								// ======================================= p.46
-Const
+CONST
 
 WORD_MAX=40;					// max name length
 LINE_MAX=80;					// max textline length
@@ -11,9 +11,9 @@ PERIOD	='.';
 COMMA	=',';
 SPACE	=' ';
 EQUALS	='=';
-DEFINETE='100';
+DEFINITE=100;
 
-Type
+TYPE
 								// user types
 word_string	=string[WORD_MAX];
 line_string	=string[LINE_MAX];
@@ -28,7 +28,7 @@ val=record
 	cert	:integer;			// ???
 end;
 
-legal_ptr	=^legal_val;//^val in book (?)
+legal_ptr	=^legal_val;
 legal_val=record
 	next	:legal_ptr;
 	name	:word_string;
@@ -44,6 +44,39 @@ obj=record
 	sought		:boolean;		// ???
 end;
 
-begin
+								// ======================================= p.48
+prem_ptr=^prem;
+con_ptr=^con;
+rule_ptr=^rule;
+prem=record
+	next	:prem_ptr;
+	obj		:word_string;
+	value	:word_string;
+end;
+con=record
+	next	:con_ptr;
+	obj		:word_string;
+	value	:word_string;
+	cert	:integer;
+end;
+rule=record
+	next	:rule_ptr;
+	name	:word_string;
+	prem	:prem_ptr;
+	con		:con_ptr;
+end;
+
+VAR
+
+max_choice, choice_lim, choice	:integer;
+last_try, top_fact				:object_ptr;
+s_word, s_object, s_value		:word_string;
+s_line							:line_string;
+s_cf							:integer;
+top_rule						:rule_ptr;
+rules							:Text;
+explain							:boolean;
+
+BEGIN
 	writeln('Hello World!');
-end.
+END.
