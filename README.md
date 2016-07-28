@@ -7,5 +7,10 @@ github: https://github.com/ponyatov/exPas
 
 ### Links
 
-(ru) Б.Сойер Д.Л.Фостер
+Brian Sawyer, Dennis Foster
+Programming expert systems in Pascal
+(c) A Wiley press book, 1986
+
+[ru] Б.Сойер Д.Л.Фостер
 Программирование экспертных систем на Паскале
+М.: Финансы и статистика, 1990
