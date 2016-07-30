@@ -21,20 +21,20 @@ line_string	=string[LINE_MAX];
 value_ptr	=^val;//ue
 object_ptr	=^obj;//ect
 								// ======================================= p.47
-val=record
+val=RECORD
 	next	:value_ptr;			// next value in list
 	name	:word_string;		// value name
 	setby	:word_string;		// ???
 	cert	:integer;			// ???
-end;
+END;
 
 legal_ptr	=^legal_val;
-legal_val=record
+legal_val=RECORD
 	next	:legal_ptr;
 	name	:word_string;
-end;
+END;
 
-obj=record
+obj=RECORD
 	next		:object_ptr;	// next object in list
 	name		:word_string;	// object name
 	value_list	:value_ptr;		// list of values
@@ -42,29 +42,29 @@ obj=record
 	multivald	:boolean;		// ???
 	legal_list	:legal_ptr;		// ???
 	sought		:boolean;		// ???
-end;
+END;
 
 								// ======================================= p.48
 prem_ptr=^prem;
 con_ptr=^con;
 rule_ptr=^rule;
-prem=record
+prem=RECORD
 	next	:prem_ptr;
 	obj		:word_string;
 	value	:word_string;
-end;
-con=record
+END;
+con=RECORD
 	next	:con_ptr;
 	obj		:word_string;
 	value	:word_string;
 	cert	:integer;
-end;
-rule=record
+END;
+rule=RECORD
 	next	:rule_ptr;
 	name	:word_string;
 	prem	:prem_ptr;
 	con		:con_ptr;
-end;
+END;
 
 VAR
 
@@ -76,6 +76,25 @@ s_cf							:integer;
 top_rule						:rule_ptr;
 rules							:Text;
 explain							:boolean;
+
+								// ======================================= p.50
+PROCEDURE make_node(VAR curr_object:object_ptr);
+// create new object node
+VAR
+	head	:object_ptr;
+BEGIN
+	new(curr_object);			// allocate memory for object
+	head := top_fact;			// save current objec list head
+	top_fact := curr_object;	// set object list to allocated (uninit) object
+	WITH curr_object^ DO BEGIN
+		next := head;			// set ptr to old object list head
+		value_list := NIL;
+		question := '';
+		legal_list := NIL;
+		multivald := FALSE;
+		sought := FALSE;
+	END;
+END;
 
 BEGIN
 	writeln('Hello World!');
