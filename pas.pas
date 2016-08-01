@@ -107,16 +107,50 @@ BEGIN
 		find_object	:= last_try
 	ELSE BEGIN
 		curr_object	:= top_fact;	// init with head of object list
-		last_try	:= NIL;
 		find_object	:= NIL;			// default return value is nil
+		last_try	:= NIL;			// clear cache
 		WHILE ((curr_object<>NIL) and (last_try=NIL)) DO BEGIN
 			IF (curr_object^.name=f_object) THEN BEGIN
 				find_object	:= curr_object;
-				last_try	:= curr_object;
+				last_try	:= curr_object;		// cache found object search
 			END;
-			curr_object := curr_object^.next;
+			curr_object := curr_object^.next;	// move to next object in list
 		END;
 	END;
+END;
+
+								// ======================================= p.52
+PROCEDURE split(
+	f_line	:line_string;		// input string in form 'object=value'
+//	VAR
+	f_object:word_string;		// 'object' part
+	f_value	:word_string		// 'value' part
+	);
+VAR
+	st_left, st_right	:integer;
+BEGIN
+	st_right := pos(PERIOD,f_line);		// get '.' position
+	IF (st_right=length(f_line))		// if '.' @ end of f_line
+		THEN f_line := copy(f_line,1,st_right-1);	// remove end '.'
+
+	st_left	:= pos(EQUALS,f_line);
+	st_right:= pos(COMMA ,f_line);
+	
+	IF ((st_left=0) and (st_right=0))
+		THEN f_object := f_line;
+		
+	IF (st_right=0)
+		THEN st_right := length(f_line)+1;	// move st_right to end of f_line
+	
+	IF (st_left>0) THEN BEGIN
+		f_object := copy(f_line,1,st_left-1);	// copy left part
+		IF (pos(')',f_object)=0) THEN			// if no closing )
+			f_value := copy(f_line,st_left+1,st_right-st_left-1);	// right
+	END;
+	
+	st_right := pos(')',f_object);			// scan for closing )
+	IF (st_right>0) THEN
+		f_object := copy(f_line,1,st_right-1); 
 END;
 
 BEGIN
