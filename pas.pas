@@ -96,6 +96,29 @@ BEGIN
 	END;
 END;
 
+								// ======================================= p.51
+FUNCTION find_object(f_object:word_string):object_ptr;
+// find object by it's name (iterate over objects list)
+VAR
+	curr_object	:object_ptr;	// tmp objects list iterator 
+BEGIN
+	IF (last_try<>NIL) and (last_try^.name=f_object)	// hint: cached search
+	THEN
+		find_object	:= last_try
+	ELSE BEGIN
+		curr_object	:= top_fact;	// init with head of object list
+		last_try	:= NIL;
+		find_object	:= NIL;			// default return value is nil
+		WHILE ((curr_object<>NIL) and (last_try=NIL)) DO BEGIN
+			IF (curr_object^.name=f_object) THEN BEGIN
+				find_object	:= curr_object;
+				last_try	:= curr_object;
+			END;
+			curr_object := curr_object^.next;
+		END;
+	END;
+END;
+
 BEGIN
 	writeln('Hello World!');
 END.
